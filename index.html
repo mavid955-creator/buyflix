@@ -3,33 +3,149 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BuyFlix - Online Shopping</title>
+  <title>BuyFlix - Shop Everything</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Language toggle small styling */
+    #langToggle {
+      background: #232f3e;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      margin-left: 10px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    #langToggle:hover {
+      background: #37475a;
+    }
+  </style>
 </head>
 <body>
-  <header class="navbar">
-    <div class="logo">🛒 BuyFlix</div>
+
+  <!-- 🔹 Navbar -->
+  <div class="navbar">
+    <div class="logo" id="logo">🛍️ BuyFlix</div>
     <input type="text" id="searchBox" placeholder="Search for products..." />
     <div class="nav-links">
-      <button onclick="changeLanguage()">🌐 Lang</button>
-      <a href="#">Login</a>
-      <a href="#">Cart 🛍️</a>
+      <button onclick="window.location.href='login.html'" id="loginBtn">Login</button>
+      <button onclick="window.location.href='signup.html'" id="signupBtn">Sign Up</button>
+      <button onclick="window.location.href='checkout.html'">Cart</button>
+      <button id="logoutBtn" style="display:none;">Logout</button>
+      <span id="userName" style="margin-left:10px; font-weight:600;"></span>
+      <button id="langToggle">हिन्दी</button>
     </div>
-  </header>
+  </div>
 
-  <section class="hero">
-    <h1 id="heroText">Welcome to BuyFlix!</h1>
-    <p id="heroSub">Your one-stop shop for everything you love.</p>
+  <!-- 🔹 Hero Section -->
+  <div class="hero" id="hero">
+    <h1>Welcome to BuyFlix</h1>
+    <p>Your one-stop shop for everything you love ❤️</p>
+  </div>
+
+  <!-- 🔹 Products Section -->
+  <section class="products" id="products">
+    <div class="product">
+      <img src="https://via.placeholder.com/250x180?text=Smartphone" alt="Product 1" />
+      <h3>Smartphone X1</h3>
+      <p>₹19,999</p>
+      <button onclick="buyNow()">Buy Now</button>
+    </div>
+
+    <div class="product">
+      <img src="https://via.placeholder.com/250x180?text=Headphones" alt="Product 2" />
+      <h3>Wireless Headphones</h3>
+      <p>₹2,999</p>
+      <button onclick="buyNow()">Buy Now</button>
+    </div>
+
+    <div class="product">
+      <img src="https://via.placeholder.com/250x180?text=Laptop" alt="Product 3" />
+      <h3>Laptop Pro 14</h3>
+      <p>₹64,999</p>
+      <button onclick="buyNow()">Buy Now</button>
+    </div>
+
+    <div class="product">
+      <img src="https://via.placeholder.com/250x180?text=Watch" alt="Product 4" />
+      <h3>Smart Watch</h3>
+      <p>₹4,499</p>
+      <button onclick="buyNow()">Buy Now</button>
+    </div>
   </section>
 
-  <section class="products" id="productList">
-    <!-- JS से products load होंगे -->
-  </section>
-<a id="hiddenLink" style="display:none"></a>
+  <!-- 🔹 Footer -->
   <footer>
-    <p>© 2025 BuyFlix. All rights reserved.</p>
+    <p>© 2025 BuyFlix. All Rights Reserved.</p>
   </footer>
 
-  <script src="script.js"></script>
+  <!-- 🔹 Scripts -->
+  <script>
+    // 🛒 Buy Now button redirect
+    function buyNow() {
+      const isLoggedIn = localStorage.getItem("isLoggedIn");
+      if (isLoggedIn === "true") {
+        window.location.href = "checkout.html";
+      } else {
+        alert("Please login to continue your purchase.");
+        window.location.href = "login.html";
+      }
+    }
+
+    // 🔐 Login check + Logout system
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    const user = JSON.parse(localStorage.getItem("user"));
+    const loginBtn = document.getElementById("loginBtn");
+    const signupBtn = document.getElementById("signupBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const userName = document.getElementById("userName");
+
+    if (isLoggedIn === "true" && user) {
+      loginBtn.style.display = "none";
+      signupBtn.style.display = "none";
+      logoutBtn.style.display = "inline-block";
+      userName.textContent = "👋 " + user.name;
+    }
+
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("isLoggedIn");
+      alert("You have been logged out!");
+      window.location.href = "login.html";
+    });
+
+    // 🌐 Language Toggle (English ↔ Hindi)
+    const langToggle = document.getElementById("langToggle");
+    let currentLang = "en";
+
+    langToggle.addEventListener("click", () => {
+      if (currentLang === "en") {
+        currentLang = "hi";
+        langToggle.textContent = "English";
+        document.getElementById("hero").innerHTML = `
+          <h1>BuyFlix में आपका स्वागत है</h1>
+          <p>आपकी पसंद की हर चीज़, एक ही जगह पर ❤️</p>
+        `;
+        document.getElementById("logo").textContent = "🛍️ बायफ्लिक्स";
+        document.querySelectorAll(".product h3")[0].textContent = "स्मार्टफोन X1";
+        document.querySelectorAll(".product h3")[1].textContent = "वायरलेस हेडफ़ोन";
+        document.querySelectorAll(".product h3")[2].textContent = "लैपटॉप प्रो 14";
+        document.querySelectorAll(".product h3")[3].textContent = "स्मार्ट वॉच";
+      } else {
+        currentLang = "en";
+        langToggle.textContent = "हिन्दी";
+        document.getElementById("hero").innerHTML = `
+          <h1>Welcome to BuyFlix</h1>
+          <p>Your one-stop shop for everything you love ❤️</p>
+        `;
+        document.getElementById("logo").textContent = "🛍️ BuyFlix";
+        document.querySelectorAll(".product h3")[0].textContent = "Smartphone X1";
+        document.querySelectorAll(".product h3")[1].textContent = "Wireless Headphones";
+        document.querySelectorAll(".product h3")[2].textContent = "Laptop Pro 14";
+        document.querySelectorAll(".product h3")[3].textContent = "Smart Watch";
+      }
+    });
+  </script>
+
 </body>
 </html>
