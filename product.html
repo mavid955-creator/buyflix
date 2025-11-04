@@ -13,8 +13,26 @@
 
   <section class="product-details" id="productDetails"></section>
 
+  <section class="review-section">
+    <h2>Customer Reviews</h2>
+    <div id="reviewsList"></div>
+
+    <div class="add-review">
+      <h3>Add Your Review</h3>
+      <div class="stars" id="stars">
+        <span onclick="setRating(1)">★</span>
+        <span onclick="setRating(2)">★</span>
+        <span onclick="setRating(3)">★</span>
+        <span onclick="setRating(4)">★</span>
+        <span onclick="setRating(5)">★</span>
+      </div>
+      <textarea id="reviewText" placeholder="Write your review..."></textarea>
+      <button onclick="submitReview()">Submit</button>
+    </div>
+  </section>
+
   <script>
-    const products = JSON.parse(localStorage.getItem("productsBackup")) || [
+    const products = [
       { id: 1, name_en: "Smartphone", price: "₹19,999", img: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9", desc_en: "High-speed 5G smartphone with amazing camera." },
       { id: 2, name_en: "Headphones", price: "₹2,499", img: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8", desc_en: "Noise cancelling wireless headphones." },
       { id: 3, name_en: "Laptop", price: "₹59,999", img: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8", desc_en: "Powerful laptop for work and gaming." },
@@ -23,6 +41,7 @@
 
     const productId = localStorage.getItem("selectedProduct");
     const product = products.find(p => p.id == productId);
+    const reviewsKey = `reviews_${productId}`;
 
     const div = document.getElementById("productDetails");
     div.innerHTML = `
@@ -35,9 +54,57 @@
       </div>
     `;
 
+    // ⭐ Review System
+    let selectedRating = 0;
+
+    function setRating(star) {
+      selectedRating = star;
+      const spans = document.querySelectorAll('#stars span');
+      spans.forEach((s, i) => {
+        s.classList.toggle('active', i < star);
+      });
+    }
+
+    function submitReview() {
+      const text = document.getElementById("reviewText").value.trim();
+      if (!text || selectedRating === 0) return alert("Please give rating and write a review.");
+
+      const review = {
+        rating: selectedRating,
+        text,
+        date: new Date().toLocaleString()
+      };
+
+      const old = JSON.parse(localStorage.getItem(reviewsKey)) || [];
+      old.push(review);
+      localStorage.setItem(reviewsKey, JSON.stringify(old));
+
+      document.getElementById("reviewText").value = "";
+      selectedRating = 0;
+      loadReviews();
+    }
+
+    function loadReviews() {
+      const list = document.getElementById("reviewsList");
+      const reviews = JSON.parse(localStorage.getItem(reviewsKey)) || [];
+      if (reviews.length === 0) {
+        list.innerHTML = "<p>No reviews yet. Be the first to review!</p>";
+      } else {
+        list.innerHTML = reviews.map(r => `
+          <div class="review-card">
+            <div class="stars-display">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</div>
+            <p>${r.text}</p>
+            <small>${r.date}</small>
+          </div>
+        `).join("");
+      }
+    }
+
     function goHome() {
       window.location.href = "index.html";
     }
+
+    loadReviews();
   </script>
 </body>
 </html>
