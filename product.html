@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Details - BuyFlix</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo" onclick="goHome()">🛒 BuyFlix</div>
+  </header>
+
+  <section class="product-details" id="productDetails"></section>
+
+  <script>
+    const products = JSON.parse(localStorage.getItem("productsBackup")) || [
+      { id: 1, name_en: "Smartphone", price: "₹19,999", img: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9", desc_en: "High-speed 5G smartphone with amazing camera." },
+      { id: 2, name_en: "Headphones", price: "₹2,499", img: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8", desc_en: "Noise cancelling wireless headphones." },
+      { id: 3, name_en: "Laptop", price: "₹59,999", img: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8", desc_en: "Powerful laptop for work and gaming." },
+      { id: 4, name_en: "Smart Watch", price: "₹3,499", img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4", desc_en: "Track your fitness and stay connected." },
+    ];
+
+    const productId = localStorage.getItem("selectedProduct");
+    const product = products.find(p => p.id == productId);
+
+    const div = document.getElementById("productDetails");
+    div.innerHTML = `
+      <div class="details-card">
+        <img src="${product.img}" alt="${product.name_en}">
+        <h2>${product.name_en}</h2>
+        <p>${product.desc_en}</p>
+        <p><strong>${product.price}</strong></p>
+        <button onclick="goHome()">Back to Home</button>
+      </div>
+    `;
+
+    function goHome() {
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
