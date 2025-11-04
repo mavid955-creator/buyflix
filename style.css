@@ -1,0 +1,87 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #f6f6f6;
+}
+
+.navbar {
+  background: #232f3e;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+#searchBox {
+  width: 40%;
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+}
+
+.nav-links a, .nav-links button {
+  color: white;
+  margin-left: 15px;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.hero {
+  background: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30') center/cover;
+  color: white;
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 40px;
+}
+
+.product {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.product:hover {
+  transform: translateY(-5px);
+}
+
+.product img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.product h3 {
+  margin: 10px 0 5px;
+}
+
+.product p {
+  color: gray;
+}
+
+footer {
+  background: #232f3e;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
